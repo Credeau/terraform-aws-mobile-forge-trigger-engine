@@ -1,0 +1,98 @@
+#!/bin/bash
+
+# GCA Setup
+aws ecr get-login-password --region "${region}" | docker login --username AWS --password-stdin "${registry}"
+
+docker pull "${registry}/${ecr_repository}:${image_tag}"
+
+docker run -d \
+    --name ${application}-container \
+    -p ${mapped_port}:${application_port} \
+    -e DI_POSTGRES_USERNAME="${postgres_user_name}" \
+    -e DI_POSTGRES_PASSWORD="${postgres_password}" \
+    -e DI_POSTGRES_HOST="${postgres_host}" \
+    -e DI_POSTGRES_PORT="${postgres_port}" \
+    -e DI_POSTGRES_DATABASE="${postgres_db}" \
+    -e DI_MONGODB_USERNAME="${mongo_username}" \
+    -e DI_MONGODB_PASSWORD="${mongo_password}" \
+    -e DI_MONGODB_HOST="${mongo_host}" \
+    -e DI_MONGODB_PORT="${mongo_port}" \
+    -e DI_MONGODB_DATABASE="${mongo_db}" \
+    -e DI_MONGODB_ENABLED_SOURCES="${mongo_enabled_sources}" \
+    -e DI_MONGODB_MAX_POOL_SIZE="${mongo_max_pool_size}" \
+    -e DI_MONGODB_MIN_POOL_SIZE="${mongo_min_pool_size}" \
+    -e DI_MONGODB_SERVER_SELECTION_TIMEOUT_MS="${mongo_server_selection_timeout_ms}" \
+    -e DI_MONGODB_CONNECT_TIMEOUT_MS="${mongo_connect_timeout_ms}" \
+    -e DI_MONGODB_SOCKET_TIMEOUT_MS="${mongo_socket_timeout_ms}" \
+    -e DI_MONGODB_RETRY_WRITES="${mongo_retry_writes}" \
+    -e DI_MONGODB_WAIT_QUEUE_TIMEOUT_MS="${mongo_wait_queue_timeout_ms}" \
+    -e DI_KAFKA_BROKER_ENDPOINT="${kafka_broker}" \
+    -e ENABLED_TOPICS="${kafka_topics}" \
+    -e KAFKA_CONSUMER_GROUP="${consumer_group}" \
+    -e DI_TRIGGER_ENGINE_ENABLED="yes" \
+    -e DI_TRIGGER_ENGINE_SMS_TRIGGER_CONFIG="${trigger_engine_sms_trigger_config}" \
+    -e DI_TRIGGER_ENGINE_EXTRACTION_HOST="${trigger_engine_extraction_host}" \
+    -e SMS_MAPPING_PATH="${sms_mapping_path}" \
+    --restart always \
+    --log-driver=awslogs \
+    --log-opt awslogs-region="${region}" \
+    --log-opt awslogs-group="${log_group}" \
+    "${registry}/${ecr_repository}:${image_tag}"
+
+
+# Create CloudWatch Agent Configuration.
+cat > /home/ubuntu/cwa_config.json <<EOL
+{
+    "agent": {
+        "metrics_collection_interval": 60,
+        "run_as_user": "root",
+        "logfile": "/var/log/my-cloudwatch-agent.log"
+    },
+    "metrics": {
+        "aggregation_dimensions": [
+            [
+                "AutoScalingGroupName"
+            ]
+        ],
+        "append_dimensions": {
+            "AutoScalingGroupName": "\$${aws:AutoScalingGroupName}",
+            "ImageId": "\$${aws:ImageId}",
+            "InstanceId": "\$${aws:InstanceId}",
+            "InstanceType": "\$${aws:InstanceType}"
+        },
+        "metrics_collected": {
+            "disk": {
+                "measurement": [
+                        "used_percent"
+                ],
+                "metrics_collection_interval": 60,
+                "resources": [
+                        "*"
+                ],
+                "aggregation": {
+                        "type": "Max"
+                }
+            },
+            "mem": {
+                "measurement": [
+                        "mem_used_percent"
+                ],
+                "metrics_collection_interval": 60,
+                "aggregation": {
+                        "type": "Max"
+                }
+            },
+            "statsd": {
+                "metrics_aggregation_interval": 60,
+                "metrics_collection_interval": 10,
+                "service_address": ":8125"
+            }
+        }
+    }
+}
+EOL
+
+wget https://amazoncloudwatch-agent.s3.amazonaws.com/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
+sudo dpkg -i -E amazon-cloudwatch-agent.deb
+
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/home/ubuntu/cwa_config.json
