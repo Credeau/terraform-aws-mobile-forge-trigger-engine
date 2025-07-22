@@ -1,13 +1,6 @@
-resource "aws_placement_group" "trigger_engine" {
-  name            = local.stack_identifier
-  strategy        = "partition"
-  partition_count = 3
-  tags            = local.common_tags
-}
-
 resource "aws_autoscaling_group" "trigger_engine" {
   name            = local.stack_identifier
-  placement_group = aws_placement_group.trigger_engine.id
+  placement_group = aws_placement_group.main.id
 
   min_size         = var.trigger_engine_asg_min_size
   desired_capacity = var.trigger_engine_asg_desired_size
