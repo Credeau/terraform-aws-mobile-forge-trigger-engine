@@ -32,6 +32,7 @@ docker run -d \
     -e DI_TRIGGER_ENGINE_ENABLED="yes" \
     -e DI_TRIGGER_ENGINE_SMS_TRIGGER_CONFIG="${trigger_engine_sms_trigger_config}" \
     -e DI_TRIGGER_ENGINE_EXTRACTION_HOST="${trigger_engine_extraction_host}" \
+    -e DI_TRIGGER_ENGINE_TRIGGER_GAP_PERIOD="${trigger_engine_trigger_gap_period}" \
     -e SMS_MAPPING_PATH="${sms_mapping_path}" \
     --restart always \
     --log-driver=awslogs \

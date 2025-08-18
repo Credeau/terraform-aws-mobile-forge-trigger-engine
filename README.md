@@ -38,7 +38,6 @@ No modules.
 | [aws_iam_role_policy_attachment.ssh_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_launch_template.trigger_engine](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/launch_template) | resource |
 | [aws_placement_group.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/placement_group) | resource |
-| [aws_placement_group.trigger_engine](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/placement_group) | resource |
 | [aws_sns_topic.alert_topic](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic) | resource |
 | [aws_sns_topic_subscription.email_subscriptions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic_subscription) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
@@ -103,6 +102,7 @@ No modules.
 | <a name="input_trigger_engine_extraction_host"></a> [trigger\_engine\_extraction\_host](#input\_trigger\_engine\_extraction\_host) | extraction host for trigger engine | `string` | n/a | yes |
 | <a name="input_trigger_engine_instance_type"></a> [trigger\_engine\_instance\_type](#input\_trigger\_engine\_instance\_type) | Instances type to provision in ASG for trigger engine | `string` | `"t2.micro"` | no |
 | <a name="input_trigger_engine_kafka_topics"></a> [trigger\_engine\_kafka\_topics](#input\_trigger\_engine\_kafka\_topics) | kafka topics for trigger engine | `list(string)` | <pre>[<br>  "sms_batched"<br>]</pre> | no |
+| <a name="input_trigger_engine_sms_recency_hours"></a> [trigger\_engine\_sms\_recency\_hours](#input\_trigger\_engine\_sms\_recency\_hours) | sms recency hours for trigger engine to trigger on | `number` | `24` | no |
 | <a name="input_trigger_engine_sms_trigger_config"></a> [trigger\_engine\_sms\_trigger\_config](#input\_trigger\_engine\_sms\_trigger\_config) | sms trigger config for trigger engine | `string` | n/a | yes |
 | <a name="input_upscale_evaluation_period"></a> [upscale\_evaluation\_period](#input\_upscale\_evaluation\_period) | Number of seconds required to observe the system before triggering upscale | `number` | `60` | no |
 | <a name="input_upscale_schedule"></a> [upscale\_schedule](#input\_upscale\_schedule) | upscale schedule | `string` | `"0 8 * * MON-SUN"` | no |
