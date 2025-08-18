@@ -168,6 +168,7 @@ resource "aws_launch_template" "trigger_engine" {
       consumer_group                    = local.stack_identifier
       trigger_engine_sms_trigger_config = var.trigger_engine_sms_trigger_config
       trigger_engine_extraction_host    = var.trigger_engine_extraction_host
+      trigger_engine_trigger_gap_period = var.trigger_engine_sms_recency_hours
       sms_mapping_path                  = var.sms_mapping_path
       log_group                         = aws_cloudwatch_log_group.trigger_engine.name
     }

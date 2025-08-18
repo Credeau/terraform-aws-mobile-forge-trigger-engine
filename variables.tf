@@ -237,6 +237,12 @@ variable "trigger_engine_extraction_host" {
   description = "extraction host for trigger engine"
 }
 
+variable "trigger_engine_sms_recency_hours" {
+  type        = number
+  description = "sms recency hours for trigger engine to trigger on"
+  default     = 24
+}
+
 variable "sms_mapping_path" {
   type        = string
   description = "sms mapping path for trigger engine"

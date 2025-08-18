@@ -19,7 +19,7 @@ data "aws_ssm_parameter" "postgres_password" {
 }
 
 module "trigger_engine" {
-  source = "git::https://github.com/credeau/terraform-aws-mobile-forge-trigger-engine.git?ref=v1.0.0"
+  source = "git::https://github.com/credeau/terraform-aws-mobile-forge-trigger-engine.git?ref=v1.0.1"
 
   application            = "di-trigger-engine"
   environment            = "prod"
@@ -56,6 +56,7 @@ module "trigger_engine" {
   scheduled_upscale_trigger_engine_desired_size = 5
   trigger_engine_sms_trigger_config             = "s3://bucket_name/trigger_config.json"
   trigger_engine_extraction_host                = module.extraction.hostname
+  trigger_engine_sms_recency_hours              = 720
   sms_mapping_path                              = "s3://bucket_name/india_configs_sms_sender_mapping.json.enc"
   trigger_engine_kafka_topics = [
     "sms_batched"
