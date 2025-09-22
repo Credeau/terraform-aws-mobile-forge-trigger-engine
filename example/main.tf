@@ -19,7 +19,7 @@ data "aws_ssm_parameter" "postgres_password" {
 }
 
 module "trigger_engine" {
-  source = "git::https://github.com/credeau/terraform-aws-mobile-forge-trigger-engine.git?ref=v1.0.1"
+  source = "git::https://github.com/credeau/terraform-aws-mobile-forge-trigger-engine.git?ref=v1.1.0"
 
   application            = "di-trigger-engine"
   environment            = "prod"
