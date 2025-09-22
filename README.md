@@ -25,11 +25,13 @@ No modules.
 | [aws_autoscaling_schedule.trigger_engine_scheduled_downscale](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_schedule) | resource |
 | [aws_autoscaling_schedule.trigger_engine_scheduled_upscale](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_schedule) | resource |
 | [aws_cloudwatch_log_group.trigger_engine](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
+| [aws_cloudwatch_log_metric_filter.common_consumer_errors](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_metric_filter) | resource |
 | [aws_cloudwatch_metric_alarm.sms_topic_lag](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
 | [aws_cloudwatch_metric_alarm.trigger_engine_asg_cpu_downscale](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
 | [aws_cloudwatch_metric_alarm.trigger_engine_asg_cpu_upscale](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
 | [aws_cloudwatch_metric_alarm.trigger_engine_asg_memory_downscale](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
 | [aws_cloudwatch_metric_alarm.trigger_engine_asg_memory_upscale](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
+| [aws_cloudwatch_metric_alarm.trigger_engine_log_errors](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
 | [aws_iam_instance_profile.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_instance_profile) | resource |
 | [aws_iam_role.consumer_scale_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
@@ -62,6 +64,7 @@ No modules.
 | <a name="input_kafka_host_identifier"></a> [kafka\_host\_identifier](#input\_kafka\_host\_identifier) | kafka host identifier | `string` | `null` | no |
 | <a name="input_key_name"></a> [key\_name](#input\_key\_name) | ssh access key name | `string` | n/a | yes |
 | <a name="input_lag_threshold"></a> [lag\_threshold](#input\_lag\_threshold) | lag threshold for kafka topics | `number` | `100` | no |
+| <a name="input_log_metric_filters"></a> [log\_metric\_filters](#input\_log\_metric\_filters) | list of log metric filters | <pre>list(object({<br>    name           = string<br>    filter_pattern = string<br>  }))</pre> | <pre>[<br>  {<br>    "filter_pattern": "ERROR",<br>    "name": "log_errors"<br>  }<br>]</pre> | no |
 | <a name="input_logs_retention_period"></a> [logs\_retention\_period](#input\_logs\_retention\_period) | No of days to retain the logs | `number` | `7` | no |
 | <a name="input_mapped_port"></a> [mapped\_port](#input\_mapped\_port) | mapped port to expose the application | `number` | `8000` | no |
 | <a name="input_mongo_connect_timeout_ms"></a> [mongo\_connect\_timeout\_ms](#input\_mongo\_connect\_timeout\_ms) | mongo connect timeout | `number` | `30000` | no |
